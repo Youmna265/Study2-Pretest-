@@ -1,25 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>Random Survey Redirect</title>
+
+  <!-- Non-JS fallback (fires immediately) -->
+  <meta http-equiv="refresh" content="0; url=https://forms.gle/6BJUWvJp77a9eZQ89">
+
   <script>
-    // Define the list of survey URLs
+    // List of survey URLs
     const surveys = [
-      "https://forms.gle/6BJUWvJp77a9eZQ89", // Study 2 - Pretest  2.1 adv.xlinear
-      "https://forms.gle/HXiZ5fUqLZNTUcWL6" // Study 2 - Pretest  2.2 adv.xnon-linear
-      "https://forms.gle/TBL8NcKoU4GAQdSZ9", // Study 2 - Pretest  2.3 transf.xlinear
-      "https://forms.gle/R55q96rPoVLUJ1P27" // Study 2 - Pretest  2.4 transf.xnon-linear
+      "https://forms.gle/6BJUWvJp77a9eZQ89", // Study 2 - Pretest 2.1 adv × linear
+      "https://forms.gle/HXiZ5fUqLZNTUcWL6", // Study 2 - Pretest 2.2 adv × non-linear
+      "https://forms.gle/TBL8NcKoU4GAQdSZ9", // Study 2 - Pretest 2.3 transf × linear
+      "https://forms.gle/R55q96rPoVLUJ1P27"  // Study 2 - Pretest 2.4 transf × non-linear
     ];
 
-    // Shuffle and redirect
-    window.onload = function () {
-      const randomIndex = Math.floor(Math.random() * surveys.length);
-      window.location.href = surveys[randomIndex];
-    };
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const i = Math.floor(Math.random() * surveys.length);
+        location.replace(surveys[i]);      // no back button to the hub page
+        // fallback if replace is blocked:
+        setTimeout(() => { location.href = surveys[i]; }, 1000);
+      } catch (e) {
+        console.error(e);
+      }
+    });
   </script>
 </head>
 <body>
-  <p>Redirecting you to the survey...</p>
+  <p>Redirecting you to the survey…
+    If nothing happens, <a id="fallback" href="https://forms.gle/6BJUWvJp77a9eZQ89">click here</a>.
+  </p>
+  <script>
+    // Keep the visible fallback link consistent with the chosen random URL
+    (function () {
+      const urls = [
+        "https://forms.gle/6BJUWvJp77a9eZQ89",
+        "https://forms.gle/HXiZ5fUqLZNTUcWL6",
+        "https://forms.gle/TBL8NcKoU4GAQdSZ9",
+        "https://forms.gle/R55q96rPoVLUJ1P27"
+      ];
+      const i = Math.floor(Math.random() * urls.length);
+      document.getElementById('fallback').href = urls[i];
+    })();
+  </script>
 </body>
 </html>
