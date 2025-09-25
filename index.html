@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Survey Redirect</title>
+  <script>
+    // Define the list of survey URLs
+    const surveys = [
+      "https://forms.gle/6BJUWvJp77a9eZQ89", // Study 2 - Pretest  2.1 adv.xlinear
+      "https://forms.gle/HXiZ5fUqLZNTUcWL6" // Study 2 - Pretest  2.2 adv.xnon-linear
+      "https://forms.gle/TBL8NcKoU4GAQdSZ9", // Study 2 - Pretest  2.3 transf.xlinear
+      "https://forms.gle/R55q96rPoVLUJ1P27" // Study 2 - Pretest  2.4 transf.xnon-linear
+    ];
+
+    // Shuffle and redirect
+    window.onload = function () {
+      const randomIndex = Math.floor(Math.random() * surveys.length);
+      window.location.href = surveys[randomIndex];
+    };
+  </script>
+</head>
+<body>
+  <p>Redirecting you to the survey...</p>
+</body>
+</html>
