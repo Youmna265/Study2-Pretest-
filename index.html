@@ -3,46 +3,49 @@
 <head>
   <meta charset="utf-8" />
   <title>Random Survey Redirect</title>
-
-  <!-- Non-JS fallback (fires immediately) -->
-  <meta http-equiv="refresh" content="0; url=https://forms.gle/6BJUWvJp77a9eZQ89">
-
-  <script>
-    // List of survey URLs
-    const surveys = [
-      "https://forms.gle/6BJUWvJp77a9eZQ89", // Study 2 - Pretest 2.1 adv × linear
-      "https://forms.gle/HXiZ5fUqLZNTUcWL6", // Study 2 - Pretest 2.2 adv × non-linear
-      "https://forms.gle/TBL8NcKoU4GAQdSZ9", // Study 2 - Pretest 2.3 transf × linear
-      "https://forms.gle/R55q96rPoVLUJ1P27"  // Study 2 - Pretest 2.4 transf × non-linear
-    ];
-
-    window.addEventListener('DOMContentLoaded', () => {
-      try {
-        const i = Math.floor(Math.random() * surveys.length);
-        location.replace(surveys[i]);      // no back button to the hub page
-        // fallback if replace is blocked:
-        setTimeout(() => { location.href = surveys[i]; }, 1000);
-      } catch (e) {
-        console.error(e);
-      }
-    });
-  </script>
 </head>
 <body>
   <p>Redirecting you to the survey…
-    If nothing happens, <a id="fallback" href="https://forms.gle/6BJUWvJp77a9eZQ89">click here</a>.
+    If nothing happens, <a id="fallback" href="#">click here</a>.
+    <noscript>
+      <!-- JS disabled fallback: send to any one form (or list all 4 as links) -->
+      <br>JavaScript is off. Please use one of these:
+      <ul>
+        <li><a href="https://forms.gle/6BJUWvJp77a9eZQ89">Variant 1</a></li>
+        <li><a href="https://forms.gle/HXiZ5fUqLZNTUcWL6">Variant 2</a></li>
+        <li><a href="https://forms.gle/TBL8NcKoU4GAQdSZ9">Variant 3</a></li>
+        <li><a href="https://forms.gle/R55q96rPoVLUJ1P27">Variant 4</a></li>
+      </ul>
+    </noscript>
   </p>
+
   <script>
-    // Keep the visible fallback link consistent with the chosen random URL
     (function () {
-      const urls = [
-        "https://forms.gle/6BJUWvJp77a9eZQ89",
-        "https://forms.gle/HXiZ5fUqLZNTUcWL6",
-        "https://forms.gle/TBL8NcKoU4GAQdSZ9",
-        "https://forms.gle/R55q96rPoVLUJ1P27"
+      const surveys = [
+        "https://forms.gle/6BJUWvJp77a9eZQ89", // 2.1 adv × linear
+        "https://forms.gle/HXiZ5fUqLZNTUcWL6", // 2.2 adv × non-linear
+        "https://forms.gle/TBL8NcKoU4GAQdSZ9", // 2.3 transf × linear
+        "https://forms.gle/R55q96rPoVLUJ1P27"  // 2.4 transf × non-linear
       ];
-      const i = Math.floor(Math.random() * urls.length);
-      document.getElementById('fallback').href = urls[i];
+
+      // Stronger randomness when available
+      const rand32 = (window.crypto && window.crypto.getRandomValues)
+        ? window.crypto.getRandomValues(new Uint32Array(1))[0]
+        : Math.floor(Math.random() * 0xFFFFFFFF);
+
+      const i = rand32 % surveys.length;
+
+      // Optional: tag the variant so you can verify distribution inside Forms
+      const target = surveys[i] + (surveys[i].includes('?') ? '&' : '?') + 'variant=' + (i + 1);
+
+      // Make the visible fallback link match the chosen variant
+      const fallback = document.getElementById('fallback');
+      if (fallback) fallback.href = target;
+
+      // Redirect quickly; replace avoids a "back" to the hub page
+      try { location.replace(target); } catch (_) { location.href = target; }
+      // Extra safety: force navigation if replace is blocked
+      setTimeout(() => { location.href = target; }, 500);
     })();
   </script>
 </body>
